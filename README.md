@@ -1,5 +1,7 @@
 # 🤖 AI Job Post Generator & Smart Recruitment Automation (n8n)
 
+video link:  https://drive.google.com/file/d/1AhFVCm0S5cBgSpJks7jhnNEd1dgIPc-9/view?usp=sharing
+
 ## 📌 Project Overview
 This project is a **full-scale AI-powered recruitment automation system** built using **n8n (self-hosted)**.  
 It automates the entire hiring workflow — from **job post generation** to **CV screening and candidate shortlisting** — using AI, Google Sheets, Email automation, and image generation.
