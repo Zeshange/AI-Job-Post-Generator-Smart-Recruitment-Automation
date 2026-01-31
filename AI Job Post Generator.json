@@ -1,0 +1,757 @@
+{
+  "name": "AI Job Post Generator",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Post Generator",
+        "formDescription": "This form will generate job post accourding the input",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Job Titel",
+              "placeholder": "Enter Job Title",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Company name",
+              "placeholder": "Enter Company Name",
+              "defaultValue": "SkillAi Tech Institute "
+            },
+            {
+              "fieldLabel": "Location",
+              "placeholder": "Enter location",
+              "defaultValue": "Remote"
+            },
+            {
+              "fieldLabel": "Experience",
+              "placeholder": "enter experience",
+              "defaultValue": "1 year Experience "
+            },
+            {
+              "fieldLabel": "Skill1",
+              "placeholder": "Enter Skill1",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Skill2",
+              "placeholder": "Enter Skill2"
+            },
+            {
+              "fieldLabel": "Skill3",
+              "placeholder": "Enter skill3"
+            },
+            {
+              "fieldLabel": "Skill4",
+              "placeholder": "Enter skill4"
+            },
+            {
+              "fieldLabel": "Sallary",
+              "placeholder": "Enter Sallary",
+              "defaultValue": "50k  to  90k"
+            },
+            {
+              "fieldLabel": "Job Type",
+              "placeholder": "Enter Job Type",
+              "defaultValue": "Full Time"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -1392,
+        -352
+      ],
+      "id": "975cba09-29b0-42ed-9bdf-5bedc327b383",
+      "name": "On form submission",
+      "webhookId": "3ff0b5ea-8bdc-4942-a0ff-a7c41b1c5c34"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Create primary text for this job:\n\nJob Title: {{ $json['Job Titel'] }}\nCompany: {{ $json['Company name'] }}\nLocation: {{ $json.Location }}\nSkills: {{ $json['Skills '] }}\nSalary:{{ $json.Sallary }}\nJob Type: Full Time\n",
+        "options": {
+          "systemMessage": "Role: System\nContent:\nYou are a professional recruitment copywriter.\nGenerate short, high-converting primary text.\nUse a strong hiring hook and CTA.\nDo not invent information."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        -944,
+        -448
+      ],
+      "id": "7994f6da-f0bd-4ecf-b095-d3aa01cf32b0",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -944,
+        -224
+      ],
+      "id": "c8202062-538a-4bb8-8e28-b63a7a7d652c",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "d5OBSW5Zgnn4xOlI",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "=job_post_style\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -816,
+        -224
+      ],
+      "id": "d7a2d83d-c941-450b-ae15-c7ce08874a36",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "55f99132-ac59-4f8a-8f2b-2dd925d38fa7",
+              "name": "html",
+              "value": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n\n<style>\nbody{\n    margin:0;\n    padding:0;\n    background:#e5e7eb;\n    font-family:'Segoe UI',Arial,sans-serif;\n}\n\n/* FB POST CARD */\n.fb-post{\n    width:90%;\n    max-width:900px;\n    margin:30px auto;\n    background:#ffffff;\n    border-radius:26px;\n    overflow:hidden;\n    box-shadow:0 25px 60px rgba(0,0,0,0.18);\n}\n\n/* TOP BADGE */\n.badge{\n    background:linear-gradient(135deg,#ff512f,#dd2476);\n    color:#fff;\n    text-align:center;\n    font-size:22px;\n    font-weight:800;\n    padding:18px;\n    letter-spacing:1px;\n}\n\n/* HERO */\n.hero{\n    background:linear-gradient(135deg,#1f3cff,#4f46e5);\n    color:#fff;\n    padding:50px 30px;\n    text-align:center;\n}\n\n.hero h1{\n    margin:0;\n    font-size:42px;\n    font-weight:900;\n}\n\n.hero p{\n    margin-top:10px;\n    font-size:20px;\n    opacity:0.95;\n}\n\n/* INFO TAGS */\n.tags{\n    display:flex;\n    flex-wrap:wrap;\n    justify-content:center;\n    gap:12px;\n    margin-top:25px;\n}\n\n.tags span{\n    background:rgba(255,255,255,0.18);\n    padding:10px 18px;\n    border-radius:30px;\n    font-size:15px;\n    font-weight:600;\n}\n\n/* SKILLS SECTION */\n.skills-section{\n    padding:40px;\n    text-align:center;\n}\n\n.skills-section h2{\n    font-size:26px;\n    margin-bottom:20px;\n    color:#111827;\n}\n\n.skills span{\n    display:inline-block;\n    margin:8px;\n    padding:12px 22px;\n    border-radius:30px;\n    background:linear-gradient(135deg,#eef2ff,#e0e7ff);\n    color:#3730a3;\n    font-size:16px;\n    font-weight:700;\n    box-shadow:0 6px 15px rgba(99,102,241,0.25);\n}\n\n/* CTA */\n.cta{\n    margin:30px;\n    padding:35px;\n    background:linear-gradient(135deg,#ecfeff,#f0fdfa);\n    border-radius:22px;\n    text-align:center;\n}\n\n.cta h2{\n    margin:0;\n    font-size:30px;\n    color:#065f46;\n}\n\n.btn{\n    display:inline-block;\n    margin-top:20px;\n    padding:20px 45px;\n    background:linear-gradient(135deg,#22c55e,#16a34a);\n    color:#fff;\n    text-decoration:none;\n    border-radius:60px;\n    font-size:22px;\n    font-weight:800;\n    box-shadow:0 12px 30px rgba(34,197,94,0.4);\n}\n\n.email{\n    margin-top:18px;\n    font-size:17px;\n    color:#065f46;\n    font-weight:700;\n}\n\n/* FOOTER */\n.footer{\n    text-align:center;\n    padding:20px;\n    font-size:15px;\n    color:#6b7280;\n    font-weight:600;\n}\n\n/* MOBILE */\n@media(max-width:768px){\n    .hero h1{font-size:32px;}\n    .hero p{font-size:18px;}\n    .skills-section{padding:25px;}\n    .cta{margin:20px;padding:25px;}\n    .btn{width:100%;font-size:20px; font-size:16px;\n        padding:14px 18px;\n        border-radius:14px;}\n}\n\n\n\n</style>\n</head>\n\n<body>\n\n<div class=\"fb-post\">\n\n    <div class=\"badge\">🔥 WE ARE HIRING 🔥</div>\n\n    <div class=\"hero\">\n        <h1>{{ $('On form submission').item.json['Job Titel'] }}</h1>\n        <p>{{ $('On form submission').item.json['Company name'] }}</p>\n\n        <div class=\"tags\">\n            <span>📍 {{ $('On form submission').item.json.Location }}</span>\n            <span>💼 {{ $('On form submission').item.json['Job Type'] }}</span>\n            <span>💰 {{ $('On form submission').item.json.Sallary }}</span>\n        </div>\n    </div>\n\n    <div class=\"skills-section\">\n        <h2>🛠 Required Skills</h2>\n        <div class=\"skills\">\n            \n            <span>{{ $('On form submission').item.json.Skill1 }}</span>\n            <span>{{ $('On form submission').item.json.Skill2 }}</span>\n\n<span>{{ $('On form submission').item.json.Skill3 }}</span>\n\n<span>{{ $('On form submission').item.json.Skill4 }}</span>\n\n        </div>\n    </div>\n\n    <div class=\"cta\">\n        <h2>Apply Now 🚀</h2>\n        <a class=\"btn\" href=\"https://wa.me/923014870303\">📲 WhatsApp Your CV</a>\n        <div class=\"email\">📧 zeshanabduljabbar@gmail.com</div>\n    </div>\n\n    <div class=\"footer\">\n        ⏳ Limited positions available — Apply Today!\n    </div>\n\n</div>\n\n</body>\n</html>\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -592,
+        -352
+      ],
+      "id": "7098fb55-0ca1-4c20-8606-921e75f6eaf0",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hcti.io/v1/image",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "html",
+              "value": "={{ $json.html }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -368,
+        -352
+      ],
+      "id": "f5bd7ba9-0867-48aa-aed8-264912e378f7",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "jPCPcGwT0lqjhDuB",
+          "name": "Unnamed credential 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -144,
+        -352
+      ],
+      "id": "9917ee18-fed5-4d01-9eb9-a7d99b47a61b",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "sendTo": "zeshanabduljabbar@gmail.com",
+        "subject": "job post",
+        "message": "={{ $('AI Agent').item.json.output }}",
+        "options": {
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {}
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        80,
+        -352
+      ],
+      "id": "b75474b8-4d66-4673-8897-764be4da9306",
+      "name": "Send a message",
+      "webhookId": "9828f4d7-681e-40b6-bd7b-6eaf8357ab21",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "WNm6CCVbMkODjHbs",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "format": "resolved",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 2.1,
+      "position": [
+        -1392,
+        96
+      ],
+      "id": "743fd26b-764b-40ca-85a5-fbc34b50367f",
+      "name": "Email Trigger (IMAP)",
+      "notesInFlow": false,
+      "credentials": {
+        "imap": {
+          "id": "HCje65caCGnAUKyI",
+          "name": "IMAP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "attachment_0",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        -1168,
+        96
+      ],
+      "id": "28a26d97-636b-4f7e-9760-69534080e801",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1rWB7dTVVsIG6t0VdfRNm3RsH8pl2GPGe797H__cv-NU",
+          "mode": "list",
+          "cachedResultName": "Job Requirements",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rWB7dTVVsIG6t0VdfRNm3RsH8pl2GPGe797H__cv-NU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rWB7dTVVsIG6t0VdfRNm3RsH8pl2GPGe797H__cv-NU/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "job title": "={{ $json['Job Titel'] }}",
+            "skil1": "={{ $json.Skill1 }}",
+            "skill2": "={{ $json.Skill2 }}",
+            "skill3": "={{ $json.Skill3 }}",
+            "skill4": "={{ $json.Skill4 }}",
+            "experience": "={{ $json.Experience }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "job title",
+              "displayName": "job title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "skil1",
+              "displayName": "skil1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "skill2",
+              "displayName": "skill2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "skill3",
+              "displayName": "skill3",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "skill4",
+              "displayName": "skill4",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "experience",
+              "displayName": "experience",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1168,
+        -352
+      ],
+      "id": "f396f8fe-37bc-4278-a43b-3ecd54b938d6",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "U4RIm6H0AMv6Bj97",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1rWB7dTVVsIG6t0VdfRNm3RsH8pl2GPGe797H__cv-NU",
+          "mode": "list",
+          "cachedResultName": "Job Requirements",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rWB7dTVVsIG6t0VdfRNm3RsH8pl2GPGe797H__cv-NU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rWB7dTVVsIG6t0VdfRNm3RsH8pl2GPGe797H__cv-NU/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "job title",
+              "lookupValue": "={{ $('Email Trigger (IMAP)').item.json.headers.subject   .replace(/subject:\\s*/i, '')   .replace(/\\s*job/i, '')   .trim() }}"
+            }
+          ]
+        },
+        "combineFilters": "OR",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -944,
+        96
+      ],
+      "id": "5c3955b9-2919-48be-b912-362acb7f2110",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "U4RIm6H0AMv6Bj97",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=\n",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=You are an HR screening assistant.\n\nEvaluate the candidate CV against job requirements.\n\nJob Requirements:\nSkill1: {{ $json.skil1 }}\nSkill2:{{ $json.skill2 }}\nSkill3:{{ $json.skill3 }}\nSkill4:{{ $json.skill4 }}\nExperience: {{ $json.experience }}\n\nCandidate CV:\n{{ $('Extract from File').item.json.text }}\n\nGive a score from 1 to 10 based on:\n- Skills match\n- Relevant experience\n- Overall suitability\n\nReturn ONLY JSON in this format:\n{\n  \"score\": number,\n  \"reason\": \"short explanation\"\n}\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        -720,
+        96
+      ],
+      "id": "3ac36906-43bd-4c36-99d1-c87bf58eb03e",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -656,
+        320
+      ],
+      "id": "e2943d44-36dd-4562-afd1-9beb85fe1fa0",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "d5OBSW5Zgnn4xOlI",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d192851a-267d-4b1b-b45b-ae71d8e94821",
+              "name": "score",
+              "value": "={{ Number($json.output.score )}}\n\n",
+              "type": "number"
+            },
+            {
+              "id": "c04d78ff-96ce-4023-a15d-d777f1b07e09",
+              "name": "reason",
+              "value": "={{ $json.output.reason }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -352,
+        80
+      ],
+      "id": "087d6b28-68db-48a8-8726-dcd38efa5e75",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3481206b-5b07-4f18-8a88-f0e0347b4b8b",
+              "leftValue": "={{ $json.score }}",
+              "rightValue": 7,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -160,
+        96
+      ],
+      "id": "946563d2-4561-4e1e-a93c-1266f04ba042",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"score\": \"number\",\n  \"reason\": \"string\"\n}\n\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -560,
+        304
+      ],
+      "id": "cb01bed3-c6de-4a21-a48c-a93324b41857",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "sendTo": "studytime552@gmail.com",
+        "subject": "Strong Candidate",
+        "message": "=Score:   {{ $json.score }}    reason  : {{ $json.reason }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        48,
+        0
+      ],
+      "id": "4b747fb3-153e-48fa-94a8-80a254a18dbe",
+      "name": "Send a message1",
+      "webhookId": "cc0ec435-3aab-4ad0-a034-05774267c968",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "WNm6CCVbMkODjHbs",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "zeshanabduljabbar@gmail.com",
+        "subject": "Job applicant",
+        "message": "you apply but sorry",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        48,
+        192
+      ],
+      "id": "c2534690-938c-4e39-9e17-fdfc42025667",
+      "name": "Send a message2",
+      "webhookId": "59e41692-212d-4cc0-a800-108fbbddb6cd",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "WNm6CCVbMkODjHbs",
+          "name": "Gmail account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Trigger (IMAP)": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ccd06fa7-8285-423b-a445-4e1d0a84ad01",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "0a8898de8ac6841cb5cf0161388b190e554463981e144502eee6af07118e7e40"
+  },
+  "id": "9SRIQKB55GoJ6opL",
+  "tags": []
+}
